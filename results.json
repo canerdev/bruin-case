@@ -1,0 +1,22 @@
+[
+  {
+    "column": "col1",
+    "type": "string",
+    "nullable": true
+  },
+  {
+    "column": "col2",
+    "type": "integer",
+    "nullable": true
+  },
+  {
+    "column": "col3",
+    "type": "float",
+    "nullable": false
+  },
+  {
+    "column": "col4",
+    "type": "date",
+    "nullable": false
+  }
+]
