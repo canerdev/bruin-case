@@ -13,10 +13,5 @@
     "column": "col3",
     "type": "float",
     "nullable": false
-  },
-  {
-    "column": "col4",
-    "type": "date",
-    "nullable": false
   }
 ]

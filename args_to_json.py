@@ -1,5 +1,6 @@
 import argparse
 import json
+import sys
 
 # TODO order check
 # TODO null check
@@ -58,5 +59,8 @@ def list_to_json(json_list):
     json.dump(json_list , fout)
 
 if __name__ == "__main__":
-  json_list = extract_arguments()
-  list_to_json(json_list)
+  if len(sys.argv) > 1:
+    json_list = extract_arguments()
+    list_to_json(json_list)
+  else:
+    print("No arguments are passed!")
