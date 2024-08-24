@@ -1,6 +1,7 @@
 import argparse
 import json
 import sys
+import re
 
 # TODO order check
 # TODO null check
@@ -21,9 +22,17 @@ def extract_arguments():
 
   cols = args.columns
   json_list = []
+  print(cols);
+  for col in cols:
+    arg = str(col[0])
+    arg = re.sub('[^0-9a-zA-Z]+', ':', arg)
 
-  for col in cols:    
-    properties = str(col[0]).split(':')
+    properties = arg.split(':')
+
+    # check the format
+    if len(properties) == 1:
+      print("Argument format is as follows: <column name>:<column type>:<nullable or not>")
+      return;
 
     # check if the column is nullable
     if (len(properties) == 3):
