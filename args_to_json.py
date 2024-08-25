@@ -7,12 +7,8 @@ import re
 # TODO null check
 # TODO type validation
 
-# set arguments
-parser = argparse.ArgumentParser()
-parser.add_argument("-col", "--columns", help="Column details", action='append', nargs='+')
-args = parser.parse_args()
 
-def extract_arguments():
+def extract_arguments(columns):
   """
   Extracts arguments from the 'args' object and converts them into a JSON file.
   
@@ -20,19 +16,15 @@ def extract_arguments():
     json_list (list): The list of extracted arguments in JSON format.
   """
 
-  cols = args.columns
   json_list = []
-  print(cols);
-  for col in cols:
-    arg = str(col[0])
-    arg = re.sub('[^0-9a-zA-Z]+', ':', arg)
 
-    properties = arg.split(':')
+  for col in columns:
+    col = re.sub('[^0-9a-zA-Z]+', ':', col)
+    properties = col.split(':')
 
     # check the format
-    if len(properties) == 1:
-      print("Argument format is as follows: <column name>:<column type>:<nullable or not>")
-      return;
+    if len(properties) == 1 or len(properties) > 3:
+      raise ValueError("Argument format is incorrect. Expected format: <column name>:<column type>:<nullable or not>")
 
     # check if the column is nullable
     if (len(properties) == 3):
@@ -43,12 +35,14 @@ def extract_arguments():
     else:
       properties.append(False)
     
+    # create the dictionary
     col_dict = {
       "column": properties[0],
       "type": properties[1],
       "nullable": properties[2]
     }
 
+    # append the dictionary to the json list
     json_list.append(col_dict)
 
   return json_list
@@ -63,13 +57,25 @@ def list_to_json(json_list):
   Returns:
   None
   """
-  
-  with open('results.json', 'w') as fout:
-    json.dump(json_list , fout)
+
+  if json_list:
+    with open('results.json', 'w') as fout:
+      json.dump(json_list , fout)
+
+def main():
+  # set arguments
+  parser = argparse.ArgumentParser()
+  parser.add_argument("-col", "--columns", help="Column details", action='append', nargs='+')
+  args = parser.parse_args()
+
+  if args.columns:
+    columns = [item[0] for item in args.columns]
+    json_list = extract_arguments(columns)
+    list_to_json(json_list)
+
 
 if __name__ == "__main__":
   if len(sys.argv) > 1:
-    json_list = extract_arguments()
-    list_to_json(json_list)
+    main()
   else:
-    print("No arguments are passed!")
+    raise ValueError("Argument format is incorrect. Expected format: <column name>:<column type>:<nullable or not>")

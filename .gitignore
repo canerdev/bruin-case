@@ -1,1 +1,3 @@
 *.json
+*checkpoints
+__pycache/
